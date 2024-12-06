@@ -6,10 +6,10 @@ import { AppContext } from "@/pages/_app";
 export const VoteResults: FunctionComponent = () => {
   const [totalVote, setTotalVote] = useState(0);
   const [ready, setReady] = useState(false);
-  const { useTestAadhaar } = useContext(AppContext);
+  const { isTestMode } = useContext(AppContext);
 
   useEffect(() => {
-    getTotalVotes(useTestAadhaar).then((total) => {
+    getTotalVotes(isTestMode).then((total) => {
       setTotalVote(total);
       setReady(true);
     });
