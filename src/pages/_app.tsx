@@ -19,7 +19,7 @@ createWeb3Modal({
 });
 
 export const AppContext = createContext({
-  useTestAadhaar: false,
+  isTestMode: false,
   setIsTestMode: (isTest: boolean) => {},
   setVoted: (voted: boolean) => {},
 });
@@ -27,7 +27,7 @@ export const AppContext = createContext({
 export default function App({ Component, pageProps }: AppProps) {
   const [isDisplayed, setIsDisplayed] = useState<boolean>(false);
   const [ready, setReady] = useState(false);
-  const [isTestMode, setIsTestMode] = useState<boolean>(true);
+  const [isTestMode, setIsTestMode] = useState<boolean>(false);
   const [voted, setVoted] = useState(false);
 
   useEffect(() => {
@@ -59,14 +59,14 @@ export default function App({ Component, pageProps }: AppProps) {
       {ready ? (
         <AppContext.Provider
           value={{
-            useTestAadhaar: isTestMode,
-            setIsTestMode: setIsTestMode,
-            setVoted: setVoted,
+            isTestMode,
+            setIsTestMode,
+            setVoted,
           }}
         >
           <WagmiProvider config={wagmiConfig}>
             <QueryClientProvider client={queryClient}>
-              <AnonAadhaarProvider>
+              <AnonAadhaarProvider _useTestAadhaar={isTestMode}>
                 <div className="relative min-h-screen flex flex-col justify-between">
                   <div className="flex-grow">
                     <Header />

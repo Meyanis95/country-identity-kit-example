@@ -8,9 +8,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@anon-aadhaar/contracts": "^2.2.4",
-    "@anon-aadhaar/core": "^2.2.4",
-    "@anon-aadhaar/react": "^2.2.4",
+    "@anon-aadhaar/contracts": "^2.4.2",
+    "@anon-aadhaar/core": "^2.4.2",
+    "@anon-aadhaar/react": "^2.4.2",
     "@heroicons/react": "^2.0.18",
     "@tailwindcss/forms": "^0.5.7",
     "@tanstack/react-query": "^5.37.1",

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { LaunchProveModal, useAnonAadhaar } from "@anon-aadhaar/react";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import { AppContext } from "./_app";
@@ -11,38 +11,21 @@ import { useWeb3Modal } from "@web3modal/wagmi/react";
 const LaunchMode = ({
   isTest,
   setIsTestMode,
-  address,
 }: {
   isTest: boolean;
   setIsTestMode: (isTest: boolean) => void;
-  address: string;
 }) => {
   return (
-    <span onClick={() => setIsTestMode(isTest)}>
-      <LaunchProveModal
-        nullifierSeed={Math.floor(Math.random() * 1983248)}
-        signal={address}
-        buttonStyle={{
-          borderRadius: "8px",
-          border: "solid",
-          borderWidth: "1px",
-          boxShadow: "none",
-          fontWeight: 500,
-          borderColor: "#009A08",
-          color: "#009A08",
-          fontFamily: "rajdhani",
-        }}
-        buttonTitle={isTest ? "USE TEST CREDENTIALS" : "USE REAL CREDENTIALS"}
-        useTestAadhaar={isTest}
-      />
-    </span>
+    <button onClick={() => setIsTestMode(!isTest)}>
+      {isTest ? "Switch to Production Mode" : "Switch to Test Mode"}
+    </button>
   );
 };
 
 export default function Home() {
   const [anonAadhaar] = useAnonAadhaar();
-  const { setIsTestMode } = useContext(AppContext);
   const { isConnected, address } = useAccount();
+  const { isTestMode, setIsTestMode } = useContext(AppContext);
   const { open } = useWeb3Modal();
   const router = useRouter();
 
@@ -69,21 +52,25 @@ export default function Home() {
           </div>
 
           <div className="flex w-full gap-8 mb-8">
+            <LaunchMode isTest={isTestMode} setIsTestMode={setIsTestMode} />
             {isConnected ? (
-              <div>
-                <div className="flex gap-4 place-content-center">
-                  <LaunchMode
-                    isTest={false}
-                    setIsTestMode={setIsTestMode}
-                    address={address as string}
-                  />
-                  <LaunchMode
-                    isTest={true}
-                    setIsTestMode={setIsTestMode}
-                    address={address as string}
-                  />
-                </div>
-              </div>
+              <LaunchProveModal
+                nullifierSeed={Math.floor(Math.random() * 1983248)}
+                signal={address}
+                buttonStyle={{
+                  borderRadius: "8px",
+                  border: "solid",
+                  borderWidth: "1px",
+                  boxShadow: "none",
+                  fontWeight: 500,
+                  borderColor: "#009A08",
+                  color: "#009A08",
+                  fontFamily: "rajdhani",
+                }}
+                buttonTitle={
+                  isTestMode ? "USE TEST CREDENTIALS" : "USE REAL CREDENTIALS"
+                }
+              />
             ) : (
               <button
                 className="bg-[#009A08] rounded-lg text-white px-6 py-1 font-rajdhani font-medium"

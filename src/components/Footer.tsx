@@ -24,7 +24,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
   isDisplayed,
   setIsDisplayed,
 }) => {
-  const { useTestAadhaar } = useContext(AppContext);
+  const { isTestMode } = useContext(AppContext);
   const [contractAddr, setContractAddr] = useState<string | null>(null);
 
   const blob = new Blob([icons.externalLink], { type: "image/svg+xml" });
@@ -34,10 +34,10 @@ export const Footer: FunctionComponent<FooterProps> = ({
   );
 
   useEffect(() => {
-    useTestAadhaar
+    isTestMode
       ? setContractAddr(process.env.NEXT_PUBLIC_VOTE_CONTRACT_ADDRESS_TEST!)
       : setContractAddr(process.env.NEXT_PUBLIC_VOTE_CONTRACT_ADDRESS_PROD!);
-  }, [useTestAadhaar]);
+  }, [isTestMode]);
 
   return (
     <div className="relative">
