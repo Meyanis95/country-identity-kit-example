@@ -19,7 +19,7 @@ type Rating = {
 
 export default function Results() {
   const [voteBreakdown, setVoteBreakdown] = useState<Rating[] | null>(null);
-  const { useTestAadhaar } = useContext(AppContext);
+  const { isTestMode } = useContext(AppContext);
   const router = useRouter();
   const [, startReq] = useAnonAadhaar();
 
@@ -27,10 +27,10 @@ export default function Results() {
   const leftArrow = useMemo(() => URL.createObjectURL(blob), [icons.leftArrow]);
 
   useEffect(() => {
-    getTotalVotes(useTestAadhaar).then((totalVotes) => {
+    getTotalVotes(isTestMode).then((totalVotes) => {
       setVoteBreakdown(totalVotes);
     });
-  }, [useTestAadhaar]);
+  }, [isTestMode]);
 
   const onStartAgain = () => {
     startReq({ type: "logout" });

@@ -18,7 +18,7 @@ import { wagmiConfig } from "../config";
 
 export default function Vote() {
   const [anonAadhaar] = useAnonAadhaar();
-  const { useTestAadhaar, setVoted } = useContext(AppContext);
+  const { isTestMode, setVoted } = useContext(AppContext);
   const [, latestProof] = useProver();
   const [anonAadhaarCore, setAnonAadhaarCore] = useState<AnonAadhaarCore>();
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function Vote() {
       const voteTx = await writeContract(wagmiConfig, {
         abi: anonAadhaarVote.abi,
         address: `0x${
-          useTestAadhaar
+          isTestMode
             ? process.env.NEXT_PUBLIC_VOTE_CONTRACT_ADDRESS_TEST
             : process.env.NEXT_PUBLIC_VOTE_CONTRACT_ADDRESS_PROD
         }`,
@@ -83,14 +83,14 @@ export default function Vote() {
 
   useEffect(() => {
     anonAadhaarCore?.proof.nullifier
-      ? hasVoted(anonAadhaarCore?.proof.nullifier, useTestAadhaar).then(
+      ? hasVoted(anonAadhaarCore?.proof.nullifier, isTestMode).then(
           (response) => {
             if (response) router.push("/results");
             setVoted(response);
           }
         )
       : null;
-  }, [useTestAadhaar, router, setVoted, anonAadhaarCore]);
+  }, [isTestMode, router, setVoted, anonAadhaarCore]);
 
   useEffect(() => {
     if (isSuccess) router.push("./results");
